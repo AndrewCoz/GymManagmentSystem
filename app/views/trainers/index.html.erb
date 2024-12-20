@@ -1,0 +1,29 @@
+<div class="container mt-5">
+  <h1 class="mb-4 text-center">Trainers</h1>
+  <table class="table table-bordered table-hover">
+    <thead class="table-dark">
+      <tr>
+        <th>Name</th>
+        <th>Specialization</th>
+        <th>Phone</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @trainers.each do |trainer| %>
+        <tr>
+          <td><%= trainer.name %></td>
+          <td><%= trainer.specialization %></td>
+          <td><%= trainer.phone %></td>
+          <td>
+            <%= link_to 'Show', trainer, class: 'btn btn-primary btn-sm' %>
+            <%= link_to 'Edit', edit_trainer_path(trainer), class: 'btn btn-warning btn-sm' %>
+            <%= link_to 'Delete', trainer, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= link_to 'New Trainer', new_trainer_path, class: 'btn btn-success mt-3' %>
+</div>
+

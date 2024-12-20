@@ -1,0 +1,28 @@
+<div class="container mt-5">
+  <h1 class="mb-4 text-center">Gym Classes</h1>
+  <table class="table table-bordered table-hover">
+    <thead class="table-dark">
+      <tr>
+        <th>Class Name</th>
+        <th>Schedule</th>
+        <th>Trainer</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @gym_classes.each do |gym_class| %>
+        <tr>
+          <td><%= gym_class.name %></td>
+          <td><%= gym_class.schedule.strftime('%A, %d %B %Y %I:%M %p') %></td>
+          <td><%= gym_class.trainer.name %></td>
+          <td>
+            <%= link_to 'Show', gym_class, class: 'btn btn-primary btn-sm' %>
+            <%= link_to 'Edit', edit_gym_class_path(gym_class), class: 'btn btn-warning btn-sm' %>
+            <%= link_to 'Delete', gym_class, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= link_to 'New Gym Class', new_gym_class_path, class: 'btn btn-success mt-3' %>
+</div>
