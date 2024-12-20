@@ -1,0 +1,49 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Set up SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.EC2_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+
+    - name: Add EC2 to Known Hosts
+      run: |
+        ssh-keyscan -H ${{ secrets.ELASTIC_IP }} >> ~/.ssh/known_hosts
+
+    - name: Deploy to EC2
+      run: |
+        ssh -i ~/.ssh/id_rsa ubuntu@${{ secrets.ELASTIC_IP }} << 'EOF'
+        set -e
+
+        # Pull the latest code
+        if [ ! -d ~/GymManagementSystem ]; then
+          git clone https://github.com/<your-username>/<your-repo-name>.git ~/GymManagementSystem
+        fi
+
+        cd ~/GymManagementSystem
+        git pull origin main
+
+        # Install dependencies
+        bundle install
+        yarn install --production
+
+        # Precompile assets and migrate the database
+        RAILS_ENV=production rails assets:precompile
+        RAILS_ENV=production rails db:migrate
+
+        # Restart the application server
+        sudo systemctl restart gym_app
+        EOF
