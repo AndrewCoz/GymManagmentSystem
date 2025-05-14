@@ -44,3 +44,22 @@ production_cable: &production_cable
 cable:
   production:
     <<: *production_cable
+
+# Configuration for solid_queue
+queues: &queues
+  adapter: postgresql
+  encoding: unicode
+  database: <%= ENV['PGDATABASE'] %>
+  username: <%= ENV['PGUSER'] %>
+  password: <%= ENV['PGPASSWORD'] %>
+  host: <%= ENV['PGHOST'] %>
+  port: <%= ENV['PGPORT'] || '5432' %>
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+solid_queue:
+  production:
+    <<: *queues
+
+solid_cache:
+  production:
+    <<: *queues
