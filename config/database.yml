@@ -89,6 +89,10 @@ queues: &queues
   <% end %>
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
+queue:
+  production:
+    <<: *queues
+
 solid_queue:
   production:
     <<: *queues

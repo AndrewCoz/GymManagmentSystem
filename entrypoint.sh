@@ -15,16 +15,23 @@ echo "Environment: $RAILS_ENV"
 # Create directories if they don't exist
 mkdir -p tmp/pids storage log
 
-# Verify database configuration
-echo "Database configuration:"
-bin/rails runner "puts ActiveRecord::Base.connection_db_config.configuration_hash.inspect"
+# Print database configurations
+echo "Available database configurations:"
+bin/rails runner "puts ActiveRecord::Base.configurations.configs_for.map(&:name)"
+
+# Print environment variables for debugging (redact sensitive values)
+echo "Environment variables:"
+env | grep -v "_KEY\\|PASSWORD\\|SECRET" | sort
+
+# Disable background job processing for initial startup to avoid queue db issues
+export SOLID_QUEUE_ENABLED=false
 
 echo "Running database migrations..."
 # Run migrations with error handling
 if ! bin/rails db:prepare; then
   echo "Error during database migration. Falling back to SQLite if necessary."
   # Explicitly check if we can connect to the database
-  bin/rails runner "ActiveRecord::Base.connection.execute('SELECT 1')" || exit 1
+  bin/rails runner "puts 'Testing default database connection:'; ActiveRecord::Base.connection.execute('SELECT 1'); puts 'Connection successful'" || exit 1
 fi
 
 echo "Starting Rails server..."
