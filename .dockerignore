@@ -49,3 +49,14 @@
 # Ignore Docker-related files
 /.dockerignore
 /Dockerfile*
+
+# Additional rules from the code block
+.env
+.env.*
+.DS_Store
+*.rbc
+capybara-*.html
+coverage/
+spec/tmp
+.byebug_history
+node_modules/

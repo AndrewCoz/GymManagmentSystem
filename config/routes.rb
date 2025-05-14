@@ -11,6 +11,9 @@ Rails.application.routes.draw do
   
   get 'dashboard', to: 'dashboard#index'
   
+  # Health check for Railway deployment
+  get '/health', to: proc { [200, {}, ['ok']] }
+  
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
