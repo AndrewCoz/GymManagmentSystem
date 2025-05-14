@@ -22,6 +22,13 @@ ENV RAILS_LOG_TO_STDOUT=true
 ENV RAILS_SERVE_STATIC_FILES=true
 ENV NODE_ENV=production
 
+# Generate a random secret key base if not provided through environment
+RUN if [ -z "$SECRET_KEY_BASE" ] && [ -z "$RAILS_MASTER_KEY" ]; then \
+      echo "WARNING: No SECRET_KEY_BASE or RAILS_MASTER_KEY provided. Using a generated one for now."; \
+      echo "For production, please set RAILS_MASTER_KEY or SECRET_KEY_BASE in your environment."; \
+      export SECRET_KEY_BASE=$(bundle exec rails secret); \
+    fi
+
 # Precompile assets at build time if assets are available
 RUN if [ -d app/assets ]; then bundle exec rails assets:precompile; fi
 
@@ -38,6 +45,9 @@ EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
   CMD curl -f http://localhost:3000/up || exit 1
 
-# Start the server
-CMD bin/rails db:prepare && \
+# Start the server - modified to set a temporary SECRET_KEY_BASE if needed
+CMD if [ -z "$SECRET_KEY_BASE" ] && [ -z "$RAILS_MASTER_KEY" ]; then \
+      export SECRET_KEY_BASE=$(bundle exec rails secret); \
+    fi && \
+    bin/rails db:prepare && \
     bin/rails server -b 0.0.0.0 
