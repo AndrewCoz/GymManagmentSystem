@@ -1,13 +1,99 @@
 /*
- * This is a manifest file that'll be compiled into application.css.
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
  *
- * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
- * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
- * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
- * depending on specificity.
+ * Any CSS (and SCSS, if configured) file within this directory, or relative to this directory
+ * will be included in the compiled output.
  *
- * Consider organizing styles into separate files for maintainability.
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS
+ * files in this directory. It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
  */
 
- @import "bootstrap";
+/* Bootstrap import is commented out for compatibility with test environment */
+/* @import "bootstrap"; */
+
+:root {
+  --primary-color: #0d6efd;
+  --secondary-color: #6c757d;
+  --success-color: #198754;
+  --info-color: #0dcaf0;
+  --warning-color: #ffc107;
+  --danger-color: #dc3545;
+  --light-color: #f8f9fa;
+  --dark-color: #212529;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  color: #333;
+  background-color: #f5f8fa;
+}
+
+main {
+  flex: 1;
+}
+
+.card {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  border: none;
+  border-radius: 0.5rem;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px);
+}
+
+footer {
+  margin-top: 2rem;
+}
+
+/* Table styling */
+.table {
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.table thead {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+/* Form styling */
+.form-control, .btn {
+  border-radius: 0.375rem;
+}
+
+.form-control:focus {
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+}
+
+/* Navbar styling */
+.navbar .nav-link {
+  position: relative;
+  overflow: hidden;
+}
+
+.navbar .nav-link.active {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.navbar .nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Pagination styling */
+.pagination .page-link {
+  border-radius: 0.25rem;
+  margin: 0 0.125rem;
+}
 

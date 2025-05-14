@@ -5,7 +5,7 @@ gem "rails", "~> 8.0.1"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 # Use sqlite3 as the database for Active Record
-gem "sqlite3", ">= 2.1"
+gem "sqlite3", ">= 2.1", group: [:development, :test]
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
@@ -16,6 +16,22 @@ gem "turbo-rails"
 gem "stimulus-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
+# Authentication solution [https://github.com/heartcombo/devise]
+gem "devise"
+# Charts for data visualization [https://github.com/ankane/chartkick]
+gem "chartkick"
+# Date validation for improved UX [https://github.com/adzap/validates_timeliness]
+gem "validates_timeliness"
+# For Bootstrap & styling
+gem "bootstrap", "~> 5.3.0"
+gem "sassc-rails"
+# Group by month for chartkick
+gem "groupdate"
+
+# AWS related gems
+gem "aws-sdk-s3", require: false  # For ActiveStorage with S3
+gem "aws-sdk-ec2", require: false # For EC2 instance management
+gem "aws-sdk-elasticbeanstalk", require: false # For Elastic Beanstalk deployment
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
@@ -49,6 +65,11 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+  
+  # Testing framework
+  gem "rspec-rails"
+  gem "factory_bot_rails"
+  gem "faker"
 end
 
 group :development do
@@ -60,4 +81,11 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+  gem "shoulda-matchers"
+  gem "simplecov", require: false
+end
+
+group :production do
+  # Use PostgreSQL as the database for Active Record in production
+  gem "pg"
 end

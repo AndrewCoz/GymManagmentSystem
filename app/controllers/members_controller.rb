@@ -49,10 +49,10 @@ class MembersController < ApplicationController
 
   # DELETE /members/1 or /members/1.json
   def destroy
-    @member.destroy!
+    @member.destroy
 
     respond_to do |format|
-      format.html { redirect_to members_path, status: :see_other, notice: "Member was successfully destroyed." }
+      format.html { redirect_to members_url, notice: "Member was successfully destroyed." }
       format.json { head :no_content }
     end
   end
@@ -60,11 +60,11 @@ class MembersController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_member
-      @member = Member.find(params.expect(:id))
+      @member = Member.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
     def member_params
-      params.expect(member: [ :name, :email, :phone, :membership_type, :join_date ])
+      params.require(:member).permit(:name, :email, :phone, :join_date)
     end
 end

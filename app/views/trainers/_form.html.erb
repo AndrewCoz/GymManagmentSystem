@@ -1,7 +1,7 @@
 <%= form_with(model: trainer) do |form| %>
   <% if trainer.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(trainer.errors.count, "error") %> prohibited this trainer from being saved:</h2>
+    <div class="alert alert-danger">
+      <h4><%= pluralize(trainer.errors.count, "error") %> prohibited this trainer from being saved:</h4>
 
       <ul>
         <% trainer.errors.each do |error| %>
@@ -11,22 +11,28 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
+  <div class="mb-3">
+    <%= form.label :name, class: "form-label" %>
+    <%= form.text_field :name, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :email, class: "form-label" %>
+    <%= form.email_field :email, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :specialization, class: "form-label" %>
+    <%= form.text_field :specialization, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :phone, class: "form-label" %>
+    <%= form.text_field :phone, class: "form-control" %>
   </div>
 
   <div>
-    <%= form.label :specialization, style: "display: block" %>
-    <%= form.text_field :specialization %>
-  </div>
-
-  <div>
-    <%= form.label :phone, style: "display: block" %>
-    <%= form.text_field :phone %>
-  </div>
-
-  <div>
-    <%= form.submit %>
+    <%= form.submit class: "btn btn-primary" %>
+    <%= link_to "Cancel", trainers_path, class: "btn btn-secondary" %>
   </div>
 <% end %>

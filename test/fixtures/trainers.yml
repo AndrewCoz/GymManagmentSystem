@@ -1,11 +1,19 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyString
-  specialization: MyString
-  phone: MyString
+  name: Alex Smith
+  specialization: Cardio
+  phone: 555-111-2222
+  email: alex.smith@example.com
 
 two:
-  name: MyString
-  specialization: MyString
-  phone: MyString
+  name: Maria Johnson
+  specialization: Strength
+  phone: 555-333-4444
+  email: maria.johnson@example.com
+
+three:
+  name: Sam Davis
+  specialization: Yoga
+  phone: 555-555-6666
+  email: sam.davis@example.com

@@ -1,0 +1,66 @@
+/* Dashboard specific styles */
+
+.dashboard-card {
+  transition: transform 0.3s ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-5px);
+}
+
+.stats-card {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.stats-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.chart-container {
+  min-height: 300px;
+}
+
+/* Custom animation for cards */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+.delay-1 {
+  animation-delay: 0.1s;
+}
+
+.delay-2 {
+  animation-delay: 0.2s;
+}
+
+.delay-3 {
+  animation-delay: 0.3s;
+}
+
+/* Custom styling for the no-data message */
+.no-data-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  color: #6c757d;
+}
+
+.no-data-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+} 

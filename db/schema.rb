@@ -10,13 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_19_230753) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_13_233700) do
   create_table "gym_classes", force: :cascade do |t|
     t.string "name"
     t.datetime "schedule"
     t.integer "trainer_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "capacity"
     t.index ["trainer_id"], name: "index_gym_classes_on_trainer_id"
   end
 
@@ -43,6 +44,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_19_230753) do
     t.string "phone"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "email"
   end
 
   add_foreign_key "gym_classes", "trainers"

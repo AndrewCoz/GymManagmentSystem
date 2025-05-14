@@ -75,7 +75,32 @@ GEM
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
     ast (2.4.2)
+    aws-eventstream (1.3.2)
+    aws-partitions (1.1103.0)
+    aws-sdk-core (3.224.0)
+      aws-eventstream (~> 1, >= 1.3.0)
+      aws-partitions (~> 1, >= 1.992.0)
+      aws-sigv4 (~> 1.9)
+      base64
+      jmespath (~> 1, >= 1.6.1)
+      logger
+    aws-sdk-ec2 (1.523.0)
+      aws-sdk-core (~> 3, >= 3.216.0)
+      aws-sigv4 (~> 1.5)
+    aws-sdk-elasticbeanstalk (1.87.0)
+      aws-sdk-core (~> 3, >= 3.216.0)
+      aws-sigv4 (~> 1.5)
+    aws-sdk-kms (1.101.0)
+      aws-sdk-core (~> 3, >= 3.216.0)
+      aws-sigv4 (~> 1.5)
+    aws-sdk-s3 (1.186.0)
+      aws-sdk-core (~> 3, >= 3.216.0)
+      aws-sdk-kms (~> 1)
+      aws-sigv4 (~> 1.5)
+    aws-sigv4 (1.11.0)
+      aws-eventstream (~> 1, >= 1.0.2)
     base64 (0.2.0)
+    bcrypt (3.1.20)
     bcrypt_pbkdf (1.1.1)
     bcrypt_pbkdf (1.1.1-x64-mingw-ucrt)
     benchmark (0.4.0)
@@ -83,6 +108,8 @@ GEM
     bindex (0.8.1)
     bootsnap (1.18.4)
       msgpack (~> 1.2)
+    bootstrap (5.3.5)
+      popper_js (>= 2.11.8, < 3)
     brakeman (6.2.2)
       racc
     builder (3.3.0)
@@ -95,6 +122,7 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
+    chartkick (5.1.5)
     concurrent-ruby (1.3.4)
     connection_pool (2.4.1)
     crass (1.0.6)
@@ -102,17 +130,36 @@ GEM
     debug (1.10.0)
       irb (~> 1.10)
       reline (>= 0.3.8)
+    devise (4.9.4)
+      bcrypt (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (>= 4.1.0)
+      responders
+      warden (~> 1.2.3)
+    diff-lcs (1.6.2)
+    docile (1.4.1)
     dotenv (3.1.7)
     drb (2.2.1)
     ed25519 (1.3.0)
     erubi (1.13.1)
     et-orbi (1.2.11)
       tzinfo
+    factory_bot (6.5.1)
+      activesupport (>= 6.1.0)
+    factory_bot_rails (6.4.4)
+      factory_bot (~> 6.5)
+      railties (>= 5.0.0)
+    faker (3.5.1)
+      i18n (>= 1.8.11, < 2)
+    ffi (1.17.2-x64-mingw-ucrt)
+    ffi (1.17.2-x86_64-linux-gnu)
     fugit (1.11.1)
       et-orbi (~> 1, >= 1.2.11)
       raabro (~> 1.4)
     globalid (1.2.1)
       activesupport (>= 6.1)
+    groupdate (6.6.0)
+      activesupport (>= 7.1)
     i18n (1.14.6)
       concurrent-ruby (~> 1.0)
     importmap-rails (2.0.3)
@@ -126,6 +173,7 @@ GEM
     jbuilder (2.13.0)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
+    jmespath (1.6.2)
     json (2.9.1)
     kamal (2.4.0)
       activesupport (>= 7.0)
@@ -172,11 +220,15 @@ GEM
       racc (~> 1.4)
     nokogiri (1.17.2-x86_64-linux)
       racc (~> 1.4)
+    orm_adapter (0.5.0)
     ostruct (0.6.1)
     parallel (1.26.3)
     parser (3.3.6.0)
       ast (~> 2.4.1)
       racc
+    pg (1.5.9)
+    pg (1.5.9-x64-mingw-ucrt)
+    popper_js (2.11.8)
     propshaft (1.1.0)
       actionpack (>= 7.0.0)
       activesupport (>= 7.0.0)
@@ -233,7 +285,27 @@ GEM
     regexp_parser (2.9.3)
     reline (0.6.0)
       io-console (~> 0.5)
+    responders (3.1.1)
+      actionpack (>= 5.2)
+      railties (>= 5.2)
     rexml (3.4.0)
+    rspec-core (3.13.3)
+      rspec-support (~> 3.13.0)
+    rspec-expectations (3.13.4)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.13.0)
+    rspec-mocks (3.13.4)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.13.0)
+    rspec-rails (8.0.0)
+      actionpack (>= 7.2)
+      activesupport (>= 7.2)
+      railties (>= 7.2)
+      rspec-core (~> 3.13)
+      rspec-expectations (~> 3.13)
+      rspec-mocks (~> 3.13)
+      rspec-support (~> 3.13)
+    rspec-support (3.13.3)
     rubocop (1.69.2)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
@@ -264,6 +336,14 @@ GEM
       rubocop-rails
     ruby-progressbar (1.13.0)
     rubyzip (2.3.2)
+    sassc (2.4.0)
+      ffi (~> 1.9)
+    sassc-rails (2.1.2)
+      railties (>= 4.0.0)
+      sassc (>= 2.0)
+      sprockets (> 3.0)
+      sprockets-rails
+      tilt
     securerandom (0.4.1)
     selenium-webdriver (4.27.0)
       base64 (~> 0.2)
@@ -271,6 +351,14 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
+    shoulda-matchers (6.5.0)
+      activesupport (>= 5.2.0)
+    simplecov (0.22.0)
+      docile (~> 1.1)
+      simplecov-html (~> 0.11)
+      simplecov_json_formatter (~> 0.1)
+    simplecov-html (0.13.1)
+    simplecov_json_formatter (0.1.4)
     solid_cable (3.0.5)
       actioncable (>= 7.2)
       activejob (>= 7.2)
@@ -287,6 +375,14 @@ GEM
       fugit (~> 1.11.0)
       railties (>= 7.1)
       thor (~> 1.3.1)
+    sprockets (4.2.2)
+      concurrent-ruby (~> 1.0)
+      logger
+      rack (>= 2.2.4, < 4)
+    sprockets-rails (3.5.2)
+      actionpack (>= 6.1)
+      activesupport (>= 6.1)
+      sprockets (>= 3.0.0)
     sqlite3 (2.4.1-x64-mingw-ucrt)
     sqlite3 (2.4.1-x86_64-linux-gnu)
     sshkit (1.23.2)
@@ -301,6 +397,8 @@ GEM
     thor (1.3.2)
     thruster (0.1.9)
     thruster (0.1.9-x86_64-linux)
+    tilt (2.6.0)
+    timeliness (0.5.3)
     timeout (0.4.3)
     turbo-rails (2.0.11)
       actionpack (>= 6.0.0)
@@ -314,6 +412,11 @@ GEM
     unicode-emoji (4.0.4)
     uri (1.0.2)
     useragent (0.16.11)
+    validates_timeliness (8.0.0)
+      activemodel (>= 8.0.0, < 9)
+      timeliness (>= 0.3.10, < 1)
+    warden (1.2.9)
+      rack (>= 2.0.9)
     web-console (4.2.1)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -332,18 +435,32 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  aws-sdk-ec2
+  aws-sdk-elasticbeanstalk
+  aws-sdk-s3
   bootsnap
+  bootstrap (~> 5.3.0)
   brakeman
   capybara
+  chartkick
   debug
+  devise
+  factory_bot_rails
+  faker
+  groupdate
   importmap-rails
   jbuilder
   kamal
+  pg
   propshaft
   puma (>= 5.0)
   rails (~> 8.0.1)
+  rspec-rails
   rubocop-rails-omakase
+  sassc-rails
   selenium-webdriver
+  shoulda-matchers
+  simplecov
   solid_cable
   solid_cache
   solid_queue
@@ -352,6 +469,7 @@ DEPENDENCIES
   thruster
   turbo-rails
   tzinfo-data
+  validates_timeliness
   web-console
 
 BUNDLED WITH

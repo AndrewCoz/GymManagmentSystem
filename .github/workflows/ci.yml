@@ -1,90 +1,100 @@
-name: CI
+name: Rails CI/CD
 
 on:
-  pull_request:
   push:
+    branches: [ main ]
+  pull_request:
     branches: [ main ]
 
 jobs:
-  scan_ruby:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: .ruby-version
-          bundler-cache: true
-
-      - name: Scan for common Rails security vulnerabilities using static analysis
-        run: bin/brakeman --no-pager
-
-  scan_js:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: .ruby-version
-          bundler-cache: true
-
-      - name: Scan for security vulnerabilities in JavaScript dependencies
-        run: bin/importmap audit
-
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: .ruby-version
-          bundler-cache: true
-
-      - name: Lint code for consistent style
-        run: bin/rubocop -f github
-
   test:
     runs-on: ubuntu-latest
-
-    # services:
-    #  redis:
-    #    image: redis
-    #    ports:
-    #      - 6379:6379
-    #    options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
+    
+    services:
+      sqlite:
+        image: nouchka/sqlite3
+        ports:
+          - 5432:5432
+    
     steps:
-      - name: Install packages
-        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y build-essential git pkg-config google-chrome-stable
-
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: .ruby-version
-          bundler-cache: true
-
-      - name: Run tests
-        env:
-          RAILS_ENV: test
-          # REDIS_URL: redis://localhost:6379/0
-        run: bin/rails db:test:prepare test test:system
-
-      - name: Keep screenshots from failed system tests
-        uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: screenshots
-          path: ${{ github.workspace }}/tmp/screenshots
-          if-no-files-found: ignore
+    - uses: actions/checkout@v3
+    
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 3.3.0
+        bundler-cache: true
+    
+    - name: Install dependencies
+      run: |
+        gem install bundler
+        bundle install
+    
+    - name: Set up database
+      run: |
+        bundle exec rails db:create
+        bundle exec rails db:schema:load
+    
+    - name: Run tests and generate coverage
+      run: |
+        bundle exec rspec
+    
+    - name: Run security checks
+      run: |
+        bundle exec brakeman -q -w2
+    
+    - name: Run linting
+      run: |
+        bundle exec rubocop
+  
+  deploy:
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 3.3.0
+        bundler-cache: true
+    
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+    
+    - name: Install Elastic Beanstalk CLI
+      run: |
+        pip install awsebcli --upgrade --user
+        echo "~/.local/bin" >> $GITHUB_PATH
+    
+    - name: Build for production
+      run: |
+        RAILS_ENV=production bundle exec rails assets:precompile
+        
+    - name: Create Elastic Beanstalk bundle
+      run: |
+        mkdir -p .elasticbeanstalk
+        echo "branch-defaults:
+          main:
+            environment: GymManagementSystem-prod
+        global:
+          application_name: GymManagementSystem
+          default_ec2_keyname: null
+          default_platform: Ruby 3.3
+          default_region: ${{ secrets.AWS_REGION }}
+          sc: git" > .elasticbeanstalk/config.yml
+        zip -r "deploy.zip" . -x "*.git*" "node_modules/*" "tmp/*" "log/*"
+    
+    - name: Deploy to Elastic Beanstalk
+      run: |
+        eb deploy GymManagementSystem-prod || eb create GymManagementSystem-prod
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}

@@ -1,10 +1,72 @@
 <p style="color: green"><%= notice %></p>
 
-<%= render @gym_class %>
+<div class="table-container">
+  <h1>Gym Class Details</h1>
 
-<div>
-  <%= link_to "Edit this gym class", edit_gym_class_path(@gym_class) %> |
-  <%= link_to "Back to gym classes", gym_classes_path %>
-
-  <%= button_to "Destroy this gym class", @gym_class, method: :delete %>
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title"><%= @gym_class.name %></h5>
+      <p class="card-text">
+        <strong>Schedule:</strong> <%= @gym_class.schedule.strftime('%A, %d %B %Y %I:%M %p') %><br>
+        <strong>Trainer:</strong> <%= @gym_class.trainer.name %><br>
+        <strong>Enrolled Members:</strong> <%= @gym_class.members.count %>
+      </p>
+      
+      <div class="d-flex gap-2">
+        <%= link_to "Edit", edit_gym_class_path(@gym_class), class: "btn btn-warning" %>
+        <%= link_to "Back", gym_classes_path, class: "btn btn-secondary" %>
+        <%= button_to "Delete", @gym_class, method: :delete, class: "btn btn-danger", form: { data: { turbo_confirm: "Are you sure?" } } %>
+      </div>
+    </div>
+  </div>
+  
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Add Member to Class</h5>
+      <%= form_with(url: add_member_gym_class_path(@gym_class), method: :post, class: "row g-3") do |form| %>
+        <div class="col-md-8">
+          <%= form.select :member_id, 
+            Member.where.not(id: @gym_class.member_ids).collect { |m| [m.name, m.id] },
+            { include_blank: "Select a member..." },
+            { class: "form-select" } %>
+        </div>
+        <div class="col-md-4">
+          <%= form.submit "Add Member", class: "btn btn-success" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  
+  <h2>Enrolled Members</h2>
+  
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Membership Type</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @gym_class.members.each do |member| %>
+        <tr>
+          <td><%= member.name %></td>
+          <td><%= member.email %></td>
+          <td><%= member.membership_type %></td>
+          <td>
+            <%= link_to "View", member_path(member), class: "btn btn-sm btn-primary" %>
+            <%= button_to "Remove", remove_member_gym_class_path(@gym_class, member_id: member.id), 
+                method: :delete, class: "btn btn-sm btn-danger", form: { style: "display: inline-block;" } %>
+          </td>
+        </tr>
+      <% end %>
+      
+      <% if @gym_class.members.empty? %>
+        <tr>
+          <td colspan="4" class="text-center text-muted">No members enrolled in this class yet.</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 </div>

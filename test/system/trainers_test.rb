@@ -12,9 +12,10 @@ class TrainersTest < ApplicationSystemTestCase
 
   test "should create trainer" do
     visit trainers_url
-    click_on "New trainer"
+    click_on "New Trainer"
 
-    fill_in "Name", with: @trainer.name
+    fill_in "Name", with: "New Test Trainer"
+    fill_in "Email", with: "new.trainer@example.com"
     fill_in "Phone", with: @trainer.phone
     fill_in "Specialization", with: @trainer.specialization
     click_on "Create Trainer"
@@ -25,9 +26,10 @@ class TrainersTest < ApplicationSystemTestCase
 
   test "should update Trainer" do
     visit trainer_url(@trainer)
-    click_on "Edit this trainer", match: :first
+    click_on "Edit", match: :first
 
     fill_in "Name", with: @trainer.name
+    fill_in "Email", with: @trainer.email
     fill_in "Phone", with: @trainer.phone
     fill_in "Specialization", with: @trainer.specialization
     click_on "Update Trainer"
@@ -38,7 +40,10 @@ class TrainersTest < ApplicationSystemTestCase
 
   test "should destroy Trainer" do
     visit trainer_url(@trainer)
-    click_on "Destroy this trainer", match: :first
+    click_button "Delete"
+    
+    # Accept the confirmation dialog
+    page.driver.browser.switch_to.alert.accept rescue nil
 
     assert_text "Trainer was successfully destroyed"
   end

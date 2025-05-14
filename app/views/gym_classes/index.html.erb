@@ -1,7 +1,8 @@
-<div class="container mt-5">
-  <h1 class="mb-4 text-center">Gym Classes</h1>
-  <table class="table table-bordered table-hover">
-    <thead class="table-dark">
+<div class="table-container">
+  <h1>Gym Classes</h1>
+  
+  <table class="table">
+    <thead>
       <tr>
         <th>Class Name</th>
         <th>Schedule</th>
@@ -15,7 +16,7 @@
           <td><%= gym_class.name %></td>
           <td><%= gym_class.schedule.strftime('%A, %d %B %Y %I:%M %p') %></td>
           <td><%= gym_class.trainer.name %></td>
-          <td>
+          <td class="action-buttons">
             <%= link_to 'Show', gym_class, class: 'btn btn-primary btn-sm' %>
             <%= link_to 'Edit', edit_gym_class_path(gym_class), class: 'btn btn-warning btn-sm' %>
             <%= link_to 'Delete', gym_class, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' %>
@@ -24,5 +25,8 @@
       <% end %>
     </tbody>
   </table>
-  <%= link_to 'New Gym Class', new_gym_class_path, class: 'btn btn-success mt-3' %>
+  
+  <div class="text-center">
+    <%= link_to 'New Gym Class', new_gym_class_path, class: 'btn btn-success' %>
+  </div>
 </div>

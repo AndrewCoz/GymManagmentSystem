@@ -1,15 +1,22 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyString
-  email: MyString
-  phone: MyString
-  membership_type: MyString
-  join_date: 2024-12-19
+  name: John Doe
+  email: john.doe@example.com
+  phone: 555-123-4567
+  membership_type: Basic
+  join_date: <%= Date.today %>
 
 two:
-  name: MyString
-  email: MyString
-  phone: MyString
-  membership_type: MyString
-  join_date: 2024-12-19
+  name: Jane Smith
+  email: jane.smith@example.com
+  phone: 555-987-6543
+  membership_type: Premium
+  join_date: <%= Date.today %>
+
+three:
+  name: Bob Johnson
+  email: bob.johnson@example.com
+  phone: 555-456-7890
+  membership_type: VIP
+  join_date: <%= Date.today %>

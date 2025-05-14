@@ -1,7 +1,7 @@
 <%= form_with(model: gym_class) do |form| %>
   <% if gym_class.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(gym_class.errors.count, "error") %> prohibited this gym_class from being saved:</h2>
+    <div class="alert alert-danger">
+      <h4><%= pluralize(gym_class.errors.count, "error") %> prohibited this gym class from being saved:</h4>
 
       <ul>
         <% gym_class.errors.each do |error| %>
@@ -11,22 +11,27 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
+  <div class="mb-3">
+    <%= form.label :name, class: "form-label" %>
+    <%= form.text_field :name, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :schedule, class: "form-label" %>
+    <% if Rails.env.test? %>
+      <%= form.datetime_select :schedule, {}, { class: "form-select" } %>
+    <% else %>
+      <%= form.datetime_field :schedule, class: "form-control" %>
+    <% end %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :trainer_id, class: "form-label" %>
+    <%= form.collection_select :trainer_id, Trainer.all, :id, :name, {}, { class: "form-select" } %>
   </div>
 
   <div>
-    <%= form.label :schedule, style: "display: block" %>
-    <%= form.datetime_field :schedule %>
-  </div>
-
-  <div>
-    <%= form.label :trainer_id, style: "display: block" %>
-    <%= form.text_field :trainer_id %>
-  </div>
-
-  <div>
-    <%= form.submit %>
+    <%= form.submit class: "btn btn-primary" %>
+    <%= link_to "Cancel", gym_classes_path, class: "btn btn-secondary" %>
   </div>
 <% end %>

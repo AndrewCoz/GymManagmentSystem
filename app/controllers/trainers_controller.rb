@@ -25,7 +25,7 @@ class TrainersController < ApplicationController
 
     respond_to do |format|
       if @trainer.save
-        format.html { redirect_to @trainer, notice: "Trainer was successfully created." }
+        format.html { redirect_to trainer_url(@trainer), notice: "Trainer was successfully created." }
         format.json { render :show, status: :created, location: @trainer }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -38,7 +38,7 @@ class TrainersController < ApplicationController
   def update
     respond_to do |format|
       if @trainer.update(trainer_params)
-        format.html { redirect_to @trainer, notice: "Trainer was successfully updated." }
+        format.html { redirect_to trainer_url(@trainer), notice: "Trainer was successfully updated." }
         format.json { render :show, status: :ok, location: @trainer }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -49,10 +49,9 @@ class TrainersController < ApplicationController
 
   # DELETE /trainers/1 or /trainers/1.json
   def destroy
-    @trainer = Trainer.find(params[:id])
     @trainer.destroy
     respond_to do |format|
-      format.html { redirect_to trainers_url, notice: 'Trainer was successfully deleted.' }
+      format.html { redirect_to trainers_url, notice: 'Trainer was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -61,11 +60,11 @@ class TrainersController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_trainer
-      @trainer = Trainer.find(params.expect(:id))
+      @trainer = Trainer.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
     def trainer_params
-      params.expect(trainer: [ :name, :specialization, :phone ])
+      params.require(:trainer).permit(:name, :email, :phone, :specialization)
     end
 end
