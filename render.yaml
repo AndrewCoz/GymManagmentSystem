@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: gym-management-system
+    runtime: ruby
+    buildCommand: "./bin/render-build.sh"
+    startCommand: "bundle exec puma -C config/puma.rb"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: gym_management_system_db
+          property: connectionString
+      - key: RAILS_MASTER_KEY
+        sync: false
+      - key: RAILS_ENV
+        value: production
+
+databases:
+  - name: gym_management_system_db
+    databaseName: gym_management_system
+    user: gym_management_system 
