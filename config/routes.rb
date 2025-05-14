@@ -11,13 +11,9 @@ Rails.application.routes.draw do
   
   get 'dashboard', to: 'dashboard#index'
   
-  # Health check for Railway deployment
-  get '/health', to: proc { [200, {}, ['ok']] }
-  
-  # Health check endpoint for containerized deployment
-  get '/up', to: proc { [200, {}, ['OK']] }
-  
-  # Simple ping endpoint for testing
+  # Health check endpoints
+  get '/health', to: 'health#check'
+  get '/up', to: 'health#check'
   get '/ping', to: 'simple#ping'
   
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
