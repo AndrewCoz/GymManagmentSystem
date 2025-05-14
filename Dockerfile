@@ -16,6 +16,9 @@ RUN bundle config set --local without 'development test' && \
 # Copy application code
 COPY . .
 
+# Fix Windows-specific shebang lines in bin scripts
+RUN find bin -type f -exec sed -i 's|#!/usr/bin/env ruby.exe|#!/usr/bin/env ruby|g' {} \;
+
 # Set executable permissions for Rails scripts
 RUN chmod +x bin/*
 
