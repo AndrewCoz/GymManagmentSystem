@@ -53,10 +53,24 @@ EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
   CMD curl -f http://localhost:3000/up || exit 1
 
-# Start the server - modified to set a temporary SECRET_KEY_BASE if needed
-CMD if [ -z "$SECRET_KEY_BASE" ] && [ -z "$RAILS_MASTER_KEY" ]; then \
-      export SECRET_KEY_BASE=$(bundle exec rails secret); \
-      echo "WARNING: Using temporary SECRET_KEY_BASE. For production, set RAILS_MASTER_KEY or SECRET_KEY_BASE."; \
-    fi && \
-    bin/rails db:prepare && \
-    bin/rails server -b 0.0.0.0 
+# Create startup script
+RUN echo '#!/bin/bash\n\
+set -e\n\
+\n\
+# Set SECRET_KEY_BASE if not provided\n\
+if [ -z "$SECRET_KEY_BASE" ] && [ -z "$RAILS_MASTER_KEY" ]; then\n\
+  export SECRET_KEY_BASE=$(bundle exec rails secret)\n\
+  echo "WARNING: Using temporary SECRET_KEY_BASE. For production, set RAILS_MASTER_KEY or SECRET_KEY_BASE."\n\
+fi\n\
+\n\
+# Run database migrations first\n\
+echo "Running database migrations..."\n\
+bin/rails db:prepare\n\
+\n\
+# Start the Rails server\n\
+echo "Starting Rails server..."\n\
+exec bin/rails server -b 0.0.0.0\n\
+' > /app/entrypoint.sh && chmod +x /app/entrypoint.sh
+
+# Start the server with the entrypoint script
+CMD ["/app/entrypoint.sh"] 

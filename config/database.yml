@@ -22,6 +22,8 @@ test:
 
 # Production configuration for deployment
 production:
+  <% if ENV['DATABASE_URL'] || (ENV['PGDATABASE'] && ENV['PGUSER'] && ENV['PGPASSWORD'] && ENV['PGHOST']) %>
+  # PostgreSQL configuration if credentials are provided
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
@@ -35,8 +37,15 @@ production:
   host: <%= ENV['PGHOST'] %>
   port: <%= ENV['PGPORT'] || '5432' %>
   <% end %>
+  <% else %>
+  # SQLite fallback if no PostgreSQL credentials are provided
+  # Not recommended for production use but allows the app to start
+  <<: *default
+  database: storage/production.sqlite3
+  <% end %>
 
 production_cable: &production_cable
+  <% if ENV['DATABASE_URL'] || (ENV['PGDATABASE'] && ENV['PGUSER'] && ENV['PGPASSWORD'] && ENV['PGHOST']) %>
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
@@ -49,6 +58,11 @@ production_cable: &production_cable
   host: <%= ENV['PGHOST'] %>
   port: <%= ENV['PGPORT'] || '5432' %>
   <% end %>
+  <% else %>
+  # Use SQLite for cable if no PostgreSQL credentials
+  <<: *default
+  database: storage/production_cable.sqlite3
+  <% end %>
 
 cable:
   production:
@@ -56,6 +70,7 @@ cable:
 
 # Configuration for solid_queue
 queues: &queues
+  <% if ENV['DATABASE_URL'] || (ENV['PGDATABASE'] && ENV['PGUSER'] && ENV['PGPASSWORD'] && ENV['PGHOST']) %>
   adapter: postgresql
   encoding: unicode
   <% if ENV['DATABASE_URL'] %>
@@ -66,6 +81,11 @@ queues: &queues
   password: <%= ENV['PGPASSWORD'] %>
   host: <%= ENV['PGHOST'] %>
   port: <%= ENV['PGPORT'] || '5432' %>
+  <% end %>
+  <% else %>
+  # Use SQLite for queue if no PostgreSQL credentials
+  <<: *default
+  database: storage/solid_queue.sqlite3
   <% end %>
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
