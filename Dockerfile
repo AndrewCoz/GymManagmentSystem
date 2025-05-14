@@ -16,16 +16,20 @@ RUN bundle config set --local without 'development test' && \
 # Copy application code
 COPY . .
 
-# Precompile assets
-RUN SECRET_KEY_BASE=placeholder bundle exec rails assets:precompile
-
 # Set Rails environment
 ENV RAILS_ENV=production
 ENV RAILS_LOG_TO_STDOUT=true
 ENV RAILS_SERVE_STATIC_FILES=true
+ENV NODE_ENV=production
+
+# Skip asset precompilation during build
+# We'll run it during container startup when environment is fully available
+RUN mkdir -p tmp/pids
 
 # Expose port
 EXPOSE 3000
 
-# Start the server
-CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"] 
+# Start the server with precompilation at runtime
+CMD bin/rails db:migrate && \
+    bin/rails assets:precompile && \
+    bin/rails server -b 0.0.0.0 
