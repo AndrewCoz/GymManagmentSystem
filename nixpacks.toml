@@ -1,0 +1,5 @@
+[phases.setup]
+aptPkgs = ['postgresql-client', 'libpq-dev']
+
+[phases.build]
+cmds = ["bundle lock --add-platform x86_64-linux", "bundle install"] 
