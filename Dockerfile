@@ -16,6 +16,9 @@ RUN bundle config set --local without 'development test' && \
 # Copy application code
 COPY . .
 
+# Set executable permissions for Rails scripts
+RUN chmod +x bin/*
+
 # Set Rails environment
 ENV RAILS_ENV=production
 ENV RAILS_LOG_TO_STDOUT=true
