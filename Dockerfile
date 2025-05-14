@@ -22,14 +22,22 @@ ENV RAILS_LOG_TO_STDOUT=true
 ENV RAILS_SERVE_STATIC_FILES=true
 ENV NODE_ENV=production
 
-# Skip asset precompilation during build
-# We'll run it during container startup when environment is fully available
-RUN mkdir -p tmp/pids
+# Precompile assets at build time if assets are available
+RUN if [ -d app/assets ]; then bundle exec rails assets:precompile; fi
+
+# Create required directories
+RUN mkdir -p tmp/pids storage log
+
+# Set appropriate permissions
+RUN chmod -R 777 tmp storage log
 
 # Expose port
 EXPOSE 3000
 
-# Start the server with precompilation at runtime
-CMD bin/rails db:migrate && \
-    bin/rails assets:precompile && \
+# Healthcheck to verify the application is running properly
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
+  CMD curl -f http://localhost:3000/up || exit 1
+
+# Start the server
+CMD bin/rails db:prepare && \
     bin/rails server -b 0.0.0.0 

@@ -20,26 +20,35 @@ test:
   <<: *default
   database: storage/test.sqlite3
 
-# Production configuration for Railway deployment
+# Production configuration for deployment
 production:
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  # Support both individual config variables and DATABASE_URL
+  <% if ENV['DATABASE_URL'] %>
+  url: <%= ENV['DATABASE_URL'] %>
+  <% else %>
   database: <%= ENV['PGDATABASE'] %>
   username: <%= ENV['PGUSER'] %>
   password: <%= ENV['PGPASSWORD'] %>
   host: <%= ENV['PGHOST'] %>
   port: <%= ENV['PGPORT'] || '5432' %>
+  <% end %>
 
 production_cable: &production_cable
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  <% if ENV['DATABASE_URL'] %>
+  url: <%= ENV['DATABASE_URL'] %>
+  <% else %>
   database: <%= ENV['PGDATABASE'] %>
   username: <%= ENV['PGUSER'] %>
   password: <%= ENV['PGPASSWORD'] %>
   host: <%= ENV['PGHOST'] %>
   port: <%= ENV['PGPORT'] || '5432' %>
+  <% end %>
 
 cable:
   production:
@@ -49,11 +58,15 @@ cable:
 queues: &queues
   adapter: postgresql
   encoding: unicode
+  <% if ENV['DATABASE_URL'] %>
+  url: <%= ENV['DATABASE_URL'] %>
+  <% else %>
   database: <%= ENV['PGDATABASE'] %>
   username: <%= ENV['PGUSER'] %>
   password: <%= ENV['PGPASSWORD'] %>
   host: <%= ENV['PGHOST'] %>
   port: <%= ENV['PGPORT'] || '5432' %>
+  <% end %>
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 solid_queue:
