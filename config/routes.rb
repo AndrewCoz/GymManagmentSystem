@@ -29,6 +29,6 @@ Rails.application.routes.draw do
   # get "up" => "rails/health#show", as: :rails_health_check
 
   # Defines the root path route ("/")
-  # We're using the welcome route for the root to avoid authentication issues
-  root "application#welcome"
+  # Directly route to dashboard without authentication
+  root "dashboard#index"
 end

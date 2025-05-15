@@ -1,5 +1,8 @@
 # app/controllers/gym_classes_controller.rb
 class GymClassesController < ApplicationController
+  # Skip authentication
+  skip_before_action :authenticate_user!, raise: false, if: -> { respond_to?(:authenticate_user!) }
+
   before_action :set_gym_class, only: %i[show edit update destroy add_member remove_member]
 
   def index

@@ -1,4 +1,7 @@
 class TrainersController < ApplicationController
+  # Skip authentication
+  skip_before_action :authenticate_user!, raise: false, if: -> { respond_to?(:authenticate_user!) }
+
   before_action :set_trainer, only: %i[ show edit update destroy ]
 
   # GET /trainers or /trainers.json

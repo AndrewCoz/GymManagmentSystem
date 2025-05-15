@@ -1,4 +1,7 @@
 class MembersController < ApplicationController
+  # Skip authentication
+  skip_before_action :authenticate_user!, raise: false, if: -> { respond_to?(:authenticate_user!) }
+
   before_action :set_member, only: %i[ show edit update destroy ]
 
   # GET /members or /members.json
