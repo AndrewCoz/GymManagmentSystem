@@ -89,5 +89,8 @@ Rails.application.configure do
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
   
   # Allow Back4App domains
-  config.hosts << /.*\.back4app\.io/
+  config.hosts = nil # Allow all hosts in production since Back4App handles security
+  
+  # Ensure that all requests are handled as HTTPS even behind a proxy
+  config.assume_ssl = true
 end
