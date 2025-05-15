@@ -4,16 +4,19 @@ class DashboardController < ApplicationController
   
   def index
     # Get count of members
-    @members_count = Member.count rescue 0
+    @total_members = Member.count rescue 0
     
     # Get count of trainers
-    @trainers_count = Trainer.count rescue 0
+    @total_trainers = Trainer.count rescue 0
     
     # Get count of gym classes
-    @gym_classes_count = GymClass.count rescue 0
+    @total_classes = GymClass.count rescue 0
     
-    # Get recent gym classes (last 5)
-    @recent_gym_classes = GymClass.order(created_at: :desc).limit(5) rescue []
+    # Get recent gym classes 
+    @upcoming_classes = GymClass.where('schedule >= ?', Time.current)
+                                .order(schedule: :asc)
+                                .includes(:trainer)
+                                .limit(5) rescue []
     
     # Get member distribution data for chart
     @member_by_month = Member.group_by_month(:created_at, last: 6).count rescue {}

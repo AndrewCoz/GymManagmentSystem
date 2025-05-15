@@ -23,6 +23,12 @@ export RAILS_CACHE_STORE=null_store
 # Uncomment this if database issues persist
 #export RAILS_SKIP_ACTIVE_RECORD=true
 
+# Create database and run migrations
+echo "Setting up database..."
+bin/rails db:create
+bin/rails db:schema:load
+bin/rails db:seed
+
 echo "Starting Rails server..."
 # Use exec so the Rails process gets signals directly
 exec bin/rails server -b 0.0.0.0 -p 3000 -e production 

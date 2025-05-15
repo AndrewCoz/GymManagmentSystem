@@ -14,7 +14,7 @@
               <i class="bi bi-people-fill"></i>
             </div>
             <h5 style="font-size: 1.2rem; margin-bottom: 0.5rem;">Total Members</h5>
-            <h2 style="font-size: 2.5rem; font-weight: bold;"><%= @members_count %></h2>
+            <h2 style="font-size: 2.5rem; font-weight: bold;"><%= @total_members %></h2>
           </div>
         </div>
         <div class="col-md-4">
@@ -23,7 +23,7 @@
               <i class="bi bi-person-square"></i>
             </div>
             <h5 style="font-size: 1.2rem; margin-bottom: 0.5rem;">Total Trainers</h5>
-            <h2 style="font-size: 2.5rem; font-weight: bold;"><%= @trainers_count %></h2>
+            <h2 style="font-size: 2.5rem; font-weight: bold;"><%= @total_trainers %></h2>
           </div>
         </div>
         <div class="col-md-4">
@@ -32,18 +32,18 @@
               <i class="bi bi-calendar-week"></i>
             </div>
             <h5 style="font-size: 1.2rem; margin-bottom: 0.5rem;">Total Classes</h5>
-            <h2 style="font-size: 2.5rem; font-weight: bold;"><%= @gym_classes_count %></h2>
+            <h2 style="font-size: 2.5rem; font-weight: bold;"><%= @total_classes %></h2>
           </div>
         </div>
       </div>
       
-      <!-- Recent Classes -->
+      <!-- Upcoming Classes -->
       <div class="card border-0 shadow-sm rounded-3 mb-4">
         <div class="card-header bg-white border-0 pt-4 pb-0">
-          <h5 class="fw-bold"><i class="bi bi-calendar-check text-info me-2"></i>Recent Classes</h5>
+          <h5 class="fw-bold"><i class="bi bi-calendar-check text-info me-2"></i>Upcoming Classes</h5>
         </div>
         <div class="card-body">
-          <% if @recent_gym_classes.present? && @recent_gym_classes.any? %>
+          <% if @upcoming_classes.present? && @upcoming_classes.any? %>
             <div class="table-responsive">
               <table class="table table-hover">
                 <thead>
@@ -55,7 +55,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <% @recent_gym_classes.each do |gym_class| %>
+                  <% @upcoming_classes.each do |gym_class| %>
                     <tr>
                       <td><%= gym_class.name %></td>
                       <td><%= gym_class.trainer&.name || "Unknown" %></td>
@@ -71,7 +71,7 @@
           <% else %>
             <div class="text-center text-muted py-4">
               <i class="bi bi-calendar-x" style="font-size: 2rem;"></i>
-              <p class="mt-2">No classes available.</p>
+              <p class="mt-2">No upcoming classes scheduled.</p>
             </div>
           <% end %>
         </div>
