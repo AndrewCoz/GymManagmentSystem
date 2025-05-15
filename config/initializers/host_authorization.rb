@@ -1,9 +1,15 @@
-# Disable host authorization in production since Back4App handles it at their load balancer
-Rails.application.config.hosts = nil if Rails.env.production?
-
-# Allow the Back4App domain specifically
-Rails.application.config.hosts << ".b4a.run" if Rails.env.production?
-Rails.application.config.hosts << ".back4app.io" if Rails.env.production?
-
-# Also allow localhost for development and testing
-Rails.application.config.hosts << "localhost" unless Rails.env.production? 
+# Disable host authorization in production for Back4App
+if Rails.env.production?
+  # Option 1: Allow all hosts (recommended for Back4App deployment)
+  Rails.application.config.hosts = nil
+  
+  # Option 2: Use explicit hosts list instead (uncomment if needed)
+  # Rails.application.config.hosts ||= []
+  # Rails.application.config.hosts << ".b4a.run"
+  # Rails.application.config.hosts << ".back4app.io"
+  # Rails.application.config.hosts << "gymmanagementdeployment-gllfitc9.b4a.run"
+else
+  # For development and testing, allow localhost
+  Rails.application.config.hosts ||= []
+  Rails.application.config.hosts << "localhost"
+end 
