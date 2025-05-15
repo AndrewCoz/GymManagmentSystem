@@ -8,8 +8,8 @@ if defined?(Devise)
     # Allow access without confirmation
     config.allow_unconfirmed_access_for = 999.days
     
-    # Skip forcing SSL
-    config.force_ssl = false
+    # force_ssl belongs to Rails config, not Devise
+    # config.force_ssl = false
   end
   
   # Monkey patch Devise to skip authentication
