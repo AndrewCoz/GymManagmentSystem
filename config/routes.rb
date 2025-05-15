@@ -16,6 +16,12 @@ Rails.application.routes.draw do
   get '/up', to: 'health#check'
   get '/ping', to: 'simple#ping'
   
+  # Application health check that doesn't need database access
+  get '/app-status', to: 'application#health_check'
+  
+  # Public welcome page that doesn't require authentication
+  get '/welcome', to: 'application#welcome'
+  
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -23,5 +29,6 @@ Rails.application.routes.draw do
   # get "up" => "rails/health#show", as: :rails_health_check
 
   # Defines the root path route ("/")
-  root "dashboard#index"
+  # We're using the welcome route for the root to avoid authentication issues
+  root "application#welcome"
 end
